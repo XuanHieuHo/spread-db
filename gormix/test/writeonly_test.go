@@ -5,7 +5,6 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/XuanHieuHo/spread-db/gormix"
 	"github.com/XuanHieuHo/spread-db/gormix/provider"
-	"github.com/XuanHieuHo/spread-db/gormix/writeonly"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gorm.io/driver/postgres"
@@ -99,8 +98,7 @@ func TestWriteDB_Create(t *testing.T) {
 				Email: "Email1@example.com",
 			}
 
-			query := writeonly.ToWriteDB(db.WithContext(ctx))
-			err := query.Create(&user).Error()
+			err := db.WithContext(ctx).Create(&user).Error()
 
 			// Then
 			if test.wantErr {
@@ -218,8 +216,8 @@ func TestWriteDB_CreateInBatches(t *testing.T) {
 			records := make([]UserDummy, len(test.values))
 			copy(records, test.values)
 
-			query := writeonly.ToWriteDB(db.WithContext(ctx))
-			err := query.CreateInBatches(&records, test.batchSize).Error()
+			// when
+			err := db.WithContext(ctx).CreateInBatches(&records, test.batchSize).Error()
 
 			// Then
 			if test.wantErr {
@@ -305,8 +303,8 @@ func TestWriteDB_Save(t *testing.T) {
 			inputUser.Name = "User 2"
 			inputUser.Email = "Email2@example.com"
 
-			query := writeonly.ToWriteDB(db.WithContext(ctx))
-			err := query.Save(&inputUser).Error()
+			// When
+			err := db.WithContext(ctx).Save(&inputUser).Error()
 
 			// Then
 			if test.wantErr {
@@ -405,8 +403,8 @@ func TestWriteDB_Update(t *testing.T) {
 				UpdatedAt: timeNow.Add(-1 * time.Minute),
 			}
 
-			query := writeonly.ToWriteDB(db.WithContext(ctx).Model(test.model).Where(test.args.query, test.args.args...))
-			err := query.Update(test.column, test.value).Scan(&originalAnimal).Error()
+			// When
+			err := db.WithContext(ctx).Model(test.model).Where(test.args.query, test.args.args...).Update(test.column, test.value).Scan(&originalAnimal).Error()
 
 			// Then
 			if test.wantErr {
@@ -506,8 +504,8 @@ func TestWriteDB_Updates(t *testing.T) {
 				UpdatedAt: timeNow.Add(-1 * time.Minute),
 			}
 
-			query := writeonly.ToWriteDB(db.WithContext(ctx).Model(test.model).Where(test.args.query, test.args.args...))
-			err := query.Updates(test.value).Scan(&originalAnimal).Error()
+			// When
+			err := db.WithContext(ctx).Model(test.model).Where(test.args.query, test.args.args...).Updates(test.value).Scan(&originalAnimal).Error()
 
 			// Then
 			if test.wantErr {
@@ -604,8 +602,8 @@ func TestWriteDB_UpdateColumn(t *testing.T) {
 				UpdatedAt: timeNow.Add(-1 * time.Minute),
 			}
 
-			query := writeonly.ToWriteDB(db.WithContext(ctx).Model(test.model).Where(test.args.query, test.args.args...))
-			err := query.UpdateColumn(test.column, test.value).Scan(&originalAnimal).Error()
+			// When
+			err := db.WithContext(ctx).Model(test.model).Where(test.args.query, test.args.args...).UpdateColumn(test.column, test.value).Scan(&originalAnimal).Error()
 
 			if test.wantErr {
 				require.Error(t, err)
@@ -704,8 +702,8 @@ func TestWriteDB_UpdateColumns(t *testing.T) {
 				UpdatedAt: timeNow.Add(-1 * time.Minute),
 			}
 
-			query := writeonly.ToWriteDB(db.WithContext(ctx).Model(test.model).Where(test.args.query, test.args.args...))
-			err := query.UpdateColumns(test.value).Scan(&originalAnimal).Error()
+			// When
+			err := db.WithContext(ctx).Model(test.model).Where(test.args.query, test.args.args...).UpdateColumns(test.value).Scan(&originalAnimal).Error()
 
 			// Then
 			if test.wantErr {
@@ -797,8 +795,9 @@ func TestWriteDB_Delete(t *testing.T) {
 				ID:   1,
 				Name: "City 1",
 			}
-			query := writeonly.ToWriteDB(db.WithContext(ctx).Where(test.args.query, test.args.args...))
-			err := query.Delete(test.model).Error()
+
+			// When
+			err := db.WithContext(ctx).Where(test.args.query, test.args.args...).Delete(test.model).Error()
 
 			// Then
 			if test.wantErr {

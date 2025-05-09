@@ -12,51 +12,51 @@ type writeDB struct {
 	db *gorm.DB
 }
 
-func (w writeDB) WithContext(ctx context.Context) gormix.ReadOnlyDB {
+func (w writeDB) WithContext(ctx context.Context) gormix.WriteOnlyDB {
 	return &writeDB{w.db.WithContext(ctx)}
 }
 
-func (w writeDB) Table(name string) gormix.ReadOnlyDB {
+func (w writeDB) Table(name string) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Table(name)}
 }
 
-func (w writeDB) Model(value interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Model(value interface{}) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Model(value)}
 }
 
-func (w writeDB) Select(query interface{}, args ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Select(query interface{}, args ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Select(query, args...)}
 }
 
-func (w writeDB) Where(query interface{}, args ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Where(query interface{}, args ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Where(query, args...)}
 }
 
-func (w writeDB) Joins(query string, args ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Joins(query string, args ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Joins(query, args...)}
 }
 
-func (w writeDB) Group(name string) gormix.ReadOnlyDB {
+func (w writeDB) Group(name string) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Group(name)}
 }
 
-func (w writeDB) Having(query interface{}, args ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Having(query interface{}, args ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Having(query, args...)}
 }
 
-func (w writeDB) Order(value interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Order(value interface{}) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Order(value)}
 }
 
-func (w writeDB) Limit(limit int) gormix.ReadOnlyDB {
+func (w writeDB) Limit(limit int) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Limit(limit)}
 }
 
-func (w writeDB) Offset(offset int) gormix.ReadOnlyDB {
+func (w writeDB) Offset(offset int) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Offset(offset)}
 }
 
-func (w writeDB) Scopes(funcs ...func(db gormix.ReadOnlyDB) gormix.ReadOnlyDB) gormix.ReadOnlyDB {
+func (w writeDB) Scopes(funcs ...func(db gormix.WriteOnlyDB) gormix.WriteOnlyDB) gormix.WriteOnlyDB {
 	var gormScopes []func(db *gorm.DB) *gorm.DB
 	for _, fn := range funcs {
 		gormScopes = append(gormScopes, func(gormDB *gorm.DB) *gorm.DB {
@@ -71,51 +71,51 @@ func (w writeDB) Scopes(funcs ...func(db gormix.ReadOnlyDB) gormix.ReadOnlyDB) g
 	return &writeDB{w.db.Scopes(gormScopes...)}
 }
 
-func (w writeDB) Unscoped() gormix.ReadOnlyDB {
+func (w writeDB) Unscoped() gormix.WriteOnlyDB {
 	return &writeDB{w.db.Unscoped()}
 }
 
-func (w writeDB) Preload(query string, args ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Preload(query string, args ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Preload(query, args...)}
 }
 
-func (w writeDB) Distinct(args ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Distinct(args ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Distinct(args...)}
 }
 
-func (w writeDB) Omit(columns ...string) gormix.ReadOnlyDB {
+func (w writeDB) Omit(columns ...string) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Omit(columns...)}
 }
 
-func (w writeDB) Raw(sql string, values ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Raw(sql string, values ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Raw(sql, values...)}
 }
 
-func (w writeDB) Find(dest interface{}, conds ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Find(dest interface{}, conds ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{db: w.db.Find(dest, conds...)}
 }
 
-func (w writeDB) First(dest interface{}, conds ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) First(dest interface{}, conds ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{db: w.db.First(dest, conds...)}
 }
 
-func (w writeDB) Last(dest interface{}, conds ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Last(dest interface{}, conds ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{db: w.db.Last(dest, conds...)}
 }
 
-func (w writeDB) Take(dest interface{}, conds ...interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Take(dest interface{}, conds ...interface{}) gormix.WriteOnlyDB {
 	return &writeDB{db: w.db.Take(dest, conds...)}
 }
 
-func (w writeDB) Scan(dest interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Scan(dest interface{}) gormix.WriteOnlyDB {
 	return &writeDB{db: w.db.Scan(dest)}
 }
 
-func (w writeDB) Pluck(column string, dest interface{}) gormix.ReadOnlyDB {
+func (w writeDB) Pluck(column string, dest interface{}) gormix.WriteOnlyDB {
 	return &writeDB{db: w.db.Pluck(column, dest)}
 }
 
-func (w writeDB) Count(count *int64) gormix.ReadOnlyDB {
+func (w writeDB) Count(count *int64) gormix.WriteOnlyDB {
 	return &writeDB{db: w.db.Count(count)}
 }
 
@@ -127,7 +127,7 @@ func (w writeDB) Rows() (*sql.Rows, error) {
 	return w.db.Rows()
 }
 
-func (w writeDB) Debug() gormix.ReadOnlyDB {
+func (w writeDB) Debug() gormix.WriteOnlyDB {
 	return &writeDB{w.db.Debug()}
 }
 
@@ -143,7 +143,7 @@ func (r writeDB) Dialector() gorm.Dialector {
 	return r.db.Dialector
 }
 
-func (w writeDB) Session(session *gorm.Session) gormix.ReadOnlyDB {
+func (w writeDB) Session(session *gorm.Session) gormix.WriteOnlyDB {
 	return &writeDB{db: w.db.Session(session)}
 }
 
@@ -207,14 +207,6 @@ func (w writeDB) Association(column string) *gorm.Association {
 
 func (w writeDB) Clauses(conds ...clause.Expression) gormix.WriteOnlyDB {
 	return &writeDB{w.db.Clauses(conds...)}
-}
-
-func ToWriteDB(r gormix.ReadOnlyDB) gormix.WriteOnlyDB {
-	write, ok := r.(gormix.WriteOnlyDB)
-	if !ok {
-		panic("invalid cast to WriteOnlyDB")
-	}
-	return write
 }
 
 func New(db *gorm.DB) gormix.WriteOnlyDB {

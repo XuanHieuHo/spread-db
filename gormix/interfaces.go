@@ -48,7 +48,43 @@ type ReadOnlyDB interface {
 
 // WriteOnlyDB
 type WriteOnlyDB interface {
-	ReadOnlyDB
+	// Read Operations
+	WithContext(ctx context.Context) WriteOnlyDB
+	Table(name string) WriteOnlyDB
+	Model(value interface{}) WriteOnlyDB
+	Select(query interface{}, args ...interface{}) WriteOnlyDB
+	Where(query interface{}, args ...interface{}) WriteOnlyDB
+	Joins(query string, args ...interface{}) WriteOnlyDB
+	Group(name string) WriteOnlyDB
+	Having(query interface{}, args ...interface{}) WriteOnlyDB
+	Order(value interface{}) WriteOnlyDB
+	Limit(limit int) WriteOnlyDB
+	Offset(offset int) WriteOnlyDB
+	Scopes(funcs ...func(db WriteOnlyDB) WriteOnlyDB) WriteOnlyDB
+	Unscoped() WriteOnlyDB
+	Preload(query string, args ...interface{}) WriteOnlyDB
+	Distinct(args ...interface{}) WriteOnlyDB
+	Omit(columns ...string) WriteOnlyDB
+	Raw(sql string, values ...interface{}) WriteOnlyDB
+
+	// Read Operations
+	Find(dest interface{}, conds ...interface{}) WriteOnlyDB
+	First(dest interface{}, conds ...interface{}) WriteOnlyDB
+	Last(dest interface{}, conds ...interface{}) WriteOnlyDB
+	Take(dest interface{}, conds ...interface{}) WriteOnlyDB
+	Scan(dest interface{}) WriteOnlyDB
+	Pluck(column string, dest interface{}) WriteOnlyDB
+	Count(count *int64) WriteOnlyDB
+	Row() *sql.Row
+	Rows() (*sql.Rows, error)
+
+	// Debug
+	Debug() WriteOnlyDB
+
+	Statement() *gorm.Statement
+	Error() error
+	Dialector() gorm.Dialector
+	Session(session *gorm.Session) WriteOnlyDB
 
 	// Write Operations
 	Create(value interface{}) WriteOnlyDB

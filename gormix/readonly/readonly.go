@@ -61,7 +61,7 @@ func (r readDB) Scopes(funcs ...func(db gormix.ReadOnlyDB) gormix.ReadOnlyDB) go
 		gormScopes = append(gormScopes, func(gormDB *gorm.DB) *gorm.DB {
 			result := fn(&readDB{db: gormDB})
 
-			if resultDB, ok := result.(readDB); ok {
+			if resultDB, ok := result.(*readDB); ok {
 				return resultDB.db
 			}
 			return gormDB
